@@ -541,7 +541,7 @@ class Document extends Structure
      * @param string $eventName event name
      * @return \Sokil\Mongo\Event
      */
-    public function triggerEvent($eventName, Event $event = null)
+    public function triggerEvent(string $eventName, ?Event $event = null): void
     {
         if (!$event) {
             $event = new Event;
@@ -549,7 +549,7 @@ class Document extends Structure
 
         $event->setTarget($this);
 
-        return $this->eventDispatcher->dispatch($eventName, $event);
+        $this->eventDispatcher->dispatch($event, $eventName);
     }
 
     /**
@@ -852,11 +852,10 @@ class Document extends Structure
      * Get document by reference
      *
      * @param string    $name   name of field where reference stored
-     * @return null|Document
      *
      * @throws Exception
      */
-    public function getReferencedDocumentList($name)
+    public function getReferencedDocumentList($name): array|null
     {
         $referenceList = $this->get($name);
         if (null === $referenceList) {
